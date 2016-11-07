@@ -1,0 +1,15 @@
+FROM centos:6.8
+
+ENV  BIND_VERSION 9.10.4-P4
+RUN  yum install -y gcc make perl openssl-devel openssh-clients wget tar epel-release sshpass libcap-devel && \
+     yum clean all
+
+RUN  wget ftp://ftp.isc.org/isc/bind9/$BIND_VERSION/bind-$BIND_VERSION.tar.gz
+RUN  tar xvfz bind-$BIND_VERSION.tar.gz \
+ &&  cd bind-$BIND_VERSION \
+ &&  ./configure --prefix=/usr/local/bind-$BIND_VERSION --with-openssl=/usr --sysconfdir=/etc --with-tuning=large --enable-fetchlimit --enable-querytrace --enable-threads \
+ &&  make \
+ &&  make install
+RUN  ln -s /usr/local/bind-$BIND_VERSION/sbin/named  /usr/sbin/named
+
+RUN  rm -fr bind-$BIND_VERSION*

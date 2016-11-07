@@ -1,0 +1,24 @@
+FROM centos:6.8
+
+RUN  groupadd -g 1000 named \
+  ;  useradd -u 1000 -g named -s /sbin/nologin named \
+  ;  mkdir /etc/named \
+  ;  mkdir -p /data/named /data/nis \
+  ;  mkdir /data/named/syslog  /data/named/log \
+  ;  chown -R named:named /data/named/syslog  /data/named/log
+
+
+#ADD  named.conf      /etc/named/named.conf
+#ADD  nis_160110.tar  /data/
+ADD  named           /usr/sbin/named
+COPY entrypoint.sh   /
+
+
+VOLUME ["/etc/named","/data/nis","/data/named"]
+
+
+EXPOSE 53/udp 53/tcp 953/tcp
+
+#CMD ["/usr/sbin/named","-c","/etc/named/named.conf","-f","-u","named"]
+
+ENTRYPOINT ["/entrypoint.sh"]
