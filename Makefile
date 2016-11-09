@@ -1,7 +1,7 @@
 .PHONY: build push
 
 IMAGE = bind
-TAG = 9.10.4-P4
+TAG = 9.10.4-P3
 
 build:
 	#docker build --no-cache -f dockerfile.1 --rm=false -t $(IMAGE):$(TAG) .
